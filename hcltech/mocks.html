@@ -1,9 +1,9 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Mock Assessments — HCLTech GET Oriented</title>
-<link rel="stylesheet" href="assets/css/style.css"></head><body>
+<link rel="stylesheet" href="/hcltech/assets/css/style.css"></head><body>
 <div class="topnav"><div class="wrap">
 <div class="brand"><div class="dot">H</div><div>HCLTech GET Prep Agent<small>Mocks · Phase 9 + 10</small></div></div>
-<nav class="navlinks"><a href="index.html">Research+Roadmap</a><a href="mcq.html">MCQ Bank (130)</a><a href="coding.html">Coding Bank (35)</a><a href="mocks.html">Mock Tests</a><a href="guide.html">Guide + Cheat Sheet</a></nav>
+<nav class="navlinks"><a href="/hcltech/">Research+Roadmap</a><a href="/hcltech/mcq.html">MCQ Bank (130)</a><a href="/hcltech/coding.html">Coding Bank (35)</a><a href="/hcltech/mocks.html">Mock Tests</a><a href="/hcltech/guide.html">Guide + Cheat Sheet</a></nav>
 </div></div>
 <div class="wrap">
 <div class="hero" style="padding-bottom:6px">
@@ -24,11 +24,11 @@
 <div class="footer">Coding is self-graded honestly: mark Solved only if your code runs on the sample + one edge case. Your honesty here determines your readiness accuracy.</div>
 </div>
 <div id="toast" class="toast"></div>
-<script src="assets/js/app.js"></script>
-<script src="assets/js/mcq-data-a.js"></script>
-<script src="assets/js/mcq-data-b.js"></script>
-<script src="assets/js/coding-data.js"></script>
-<script src="assets/js/mock-data.js"></script>
+<script src="/hcltech/assets/js/app.js"></script>
+<script src="/hcltech/assets/js/mcq-data-a.js"></script>
+<script src="/hcltech/assets/js/mcq-data-b.js"></script>
+<script src="/hcltech/assets/js/coding-data.js"></script>
+<script src="/hcltech/assets/js/mock-data.js"></script>
 <script>
 const BANK=[...(window.MCQ_A||[]),...(window.MCQ_B||[])];
 const COD=window.CODING||[];
@@ -81,7 +81,7 @@ function submit(manual){
    <div class="grid g2"><div><h4>Topic performance</h4><table><tr><th>Topic</th><th>Score</th><th>Acc</th><th>Status</th></tr>${rows(byT)}</table></div>
    <div><h4>Difficulty performance</h4><table><tr><th>Level</th><th>Score</th><th>Acc</th><th>Status</th></tr>${rows(byD)}</table></div></div>
    <h4>Next study session (exactly this)</h4>
-   <p>1) Re-solve every wrong Q above from the <a href="mcq.html">MCQ bank</a>. 2) Drill weakest topic: <b>${weak[0]||'none — revise P0 mixed'}</b> (10 Qs). 3) Code 2 easy problems from the <a href="coding.html">coding bank</a>. 4) Re-take ${acc<65?'Mock 1':'the next mock'} in 2 days.</p>
+   <p>1) Re-solve every wrong Q above from the <a href="/hcltech/mcq.html">MCQ bank</a>. 2) Drill weakest topic: <b>${weak[0]||'none — revise P0 mixed'}</b> (10 Qs). 3) Code 2 easy problems from the <a href="/hcltech/coding.html">coding bank</a>. 4) Re-take ${acc<65?'Mock 1':'the next mock'} in 2 days.</p>
    <h4>History</h4><p style="color:var(--mut);font-size:13px">${hist.map(h=>`${h.date} — ${h.m}: ${h.score} (${h.acc}%)`).join('<br>')}</p></div>`;
   window.scrollTo({top:document.getElementById('result').offsetTop-80,behavior:'smooth'});
 }
