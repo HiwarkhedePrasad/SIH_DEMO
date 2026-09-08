@@ -1,0 +1,56 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coding Bank — 35 HCLTech GET Questions</title>
+<link rel="stylesheet" href="assets/css/style.css"></head><body>
+<div class="topnav"><div class="wrap">
+<div class="brand"><div class="dot">H</div><div>HCLTech GET Prep Agent<small>Coding Bank · 35 Qs · Phase 7</small></div></div>
+<nav class="navlinks"><a href="index.html">Research+Roadmap</a><a href="mcq.html">MCQ Bank (130)</a><a href="coding.html">Coding Bank (35)</a><a href="mocks.html">Mock Tests</a><a href="guide.html">Guide + Cheat Sheet</a></nav>
+</div></div>
+<div class="wrap">
+<div class="hero" style="padding-bottom:6px">
+<span class="kicker">PHASE 7 · Difficulty mix: ~60% Easy · ~30% Easy-Medium · ~10% Medium · Python solutions</span>
+<h1>Coding + DSA Bank <span class="red">(35)</span></h1>
+<p class="sub">Every question follows the full format: understanding → thinking → brute force → optimized → dry run → Python solution → complexity → mistakes → pattern. <b>Hide the solution, solve on paper first, then reveal.</b> Tick "Solved" to feed your adaptive profile.</p>
+<div class="toolbar">
+<input type="text" id="search" placeholder="Search coding questions…" oninput="render()">
+<select id="fTopic" onchange="render()"><option value="">All topics</option></select>
+<select id="fDf" onchange="render()"><option value="">All difficulties</option><option>Easy</option><option>Easy-Medium</option><option>Medium</option></select>
+</div>
+<p style="color:var(--mut);font-size:14px"><span id="count"></span> · <span id="solved"></span></p>
+</div>
+<div id="list"></div>
+<div class="footer">Rule for the assessment: <b>never submit blank</b> — a brute-force solution that passes small tests beats an empty editor. Solve ≥1 fully.</div>
+</div>
+<div id="toast" class="toast"></div>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/coding-data.js"></script>
+<script>
+const ALL=window.CODING||[];
+let done=store.get('coding_done',{});
+const topics=[...new Set(ALL.map(q=>q.topic))];
+const sel=document.getElementById('fTopic');
+topics.forEach(t=>{const o=document.createElement('option');o.textContent=t;sel.appendChild(o);});
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+function render(){
+  const s=document.getElementById('search').value.toLowerCase(),t=sel.value,d=document.getElementById('fDf').value;
+  const F=ALL.map((q,i)=>({...q,_i:i})).filter(q=>(!t||q.topic===t)&&(!d||q.df===d)&&(!s||(q.title+q.q).toLowerCase().includes(s)));
+  document.getElementById('count').textContent=`Showing ${F.length} / ${ALL.length}`;
+  document.getElementById('solved').textContent=`Solved: ${Object.keys(done).length} / ${ALL.length}`;
+  document.getElementById('list').innerHTML=F.map(q=>`
+  <div class="qcard">
+    <div class="meta"><span class="pill p2">${q.df}</span><span class="pill p3">${q.topic}</span>
+    <label style="margin-left:auto;font-size:13px"><input type="checkbox" ${done[q._i]?'checked':''} onchange="toggle(${q._i},this.checked)"> Solved</label></div>
+    <h3 style="margin:4px 0">${esc(q.title)}</h3>
+    <p><b>Question.</b> ${esc(q.q)}<br><span class="kbd">${esc(q.io)}</span></p>
+    <details><summary>Understanding (input/output, edges)</summary><p>${esc(q.u)}</p></details>
+    <details><summary>Thinking process (how an experienced candidate thinks)</summary><p>${esc(q.th)}</p></details>
+    <details><summary>Brute force</summary><p>${esc(q.bf)}</p></details>
+    <details><summary>Optimized approach</summary><p>${esc(q.op)}</p></details>
+    <details><summary>Dry run</summary><p>${esc(q.dry)}</p></details>
+    <details open><summary>Python solution</summary><pre><code>${esc(q.code)}</code></pre></details>
+    <div class="ansbox"><b>Complexity:</b> ${esc(q.cx)}<br><b>Common mistakes:</b> ${esc(q.mis)}<br><b>Pattern:</b> ${esc(q.pat)}</div>
+  </div>`).join('');
+}
+function toggle(i,v){done=store.get('coding_done',{});if(v){done[i]=1;markAnswer('Coding',true);}else delete done[i];store.set('coding_done',done);render();}
+render();
+</script>
+</body></html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Guide + Cheat Sheet — HCLTech GET</title>
+<link rel="stylesheet" href="assets/css/style.css"></head><body>
+<div class="topnav"><div class="wrap">
+<div class="brand"><div class="dot">H</div><div>HCLTech GET Prep Agent<small>Guide · Phase 8 + 11</small></div></div>
+<nav class="navlinks"><a href="index.html">Research+Roadmap</a><a href="mcq.html">MCQ Bank (130)</a><a href="coding.html">Coding Bank (35)</a><a href="mocks.html">Mock Tests</a><a href="guide.html">Guide + Cheat Sheet</a></nav>
+</div></div>
+<div class="wrap">
+<div class="hero"><span class="kicker">PHASE 8 · Repeatable thinking framework for the online assessment</span>
+<h1>How to approach <span class="red">coding questions</span></h1></div>
+
+<div class="section"><h2>The 8-step framework (use on EVERY problem)</h2>
+<div class="grid g2">
+<div class="card"><h3>Step 1 — Understand input & output</h3><p>Rewrite the problem in one line: "Given X, produce Y." Identify exact input format (N then array? lines?) and output format (YES/NO? index? 2 decimals?). 50% of fresher failures are format errors, not logic errors.</p></div>
+<div class="card"><h3>Step 2 — Create small examples</h3><p>Run 2 tiny cases by hand, including one trivial (N=1, empty) and one with duplicates. Example: second-largest [9,9,7] → answer 7, not 9.</p></div>
+<div class="card"><h3>Step 3 — List edge cases FIRST</h3><p>N=0, N=1, all-negative, all-same, already-sorted, K&gt;N, key absent. Write them as comments before coding.</p></div>
+<div class="card"><h3>Step 4 — Simplest solution first</h3><p>Brute force that works beats clever code that doesn't. Nested loops / extra array is FINE for Easy problems — submit it, then optimise only if time remains.</p></div>
+<div class="card"><h3>Step 5 — Complexity check</h3><p>Ask: N ≤ 10³? O(N²) passes. N ≤ 10⁵? Need O(N log N) or O(N). Say it in your head before coding.</p></div>
+<div class="card"><h3>Step 6 — Look for THE pattern</h3><p>Sorted + search → binary search. Pairs summing to T → hash map. Order-preserving filter → two pointers. Counting → frequency dict. Balanced symbols → stack. Extremes → best-so-far.</p></div>
+<div class="card"><h3>Step 7 — Write clean code</h3><p>Meaningful names, int(input()), solve in functions. No one-line golf — assessors and interviewers must read it.</p></div>
+<div class="card"><h3>Step 8 — Manual test</h3><p>Dry-run with your Step-2 example + one edge case. Check off-by-one (range bounds), empty input, and output format. Only then submit.</p></div>
+</div>
+<div class="card"><h3>Anti-stuck protocol (if blank for 5 min)</h3><p>1) Solve N=3 by hand and stare at your steps — that IS the algorithm. 2) Drop one constraint (assume sorted / assume distinct) and solve that. 3) Write brute force and submit — partial score &gt; zero. 4) Never switch language mid-test.</p></div></div>
+
+<div class="section"><h2>Phase 11 — Top 25 final-revision questions</h2>
+<div class="card"><ol>
+<li>Python: append vs extend (len trap)</li><li>Python: mutable default argument trap</li><li>Python: slicing [1:], [::-1]</li><li>Python: dict.get default, 'in' O(1)</li><li>Python: pip, #, // vs / vs %</li>
+<li>SQL: WHERE vs HAVING</li><li>SQL: COUNT(*) vs COUNT(col)</li><li>SQL: INNER vs LEFT JOIN</li><li>SQL: second-highest salary subquery</li><li>SQL: LIKE 'A%', BETWEEN inclusive, 1NF</li>
+<li>Pseudo: factorial/fibonacci recursion trace</li><li>Pseudo: loop count off-by-one, halving loop log n</li><li>Pseudo: 0b/0o literals, AND-before-OR</li>
+<li>CS: OSI 7 layers, TCP vs UDP, IPv4 32-bit, HTTP 80</li><li>Cloud: IaaS/PaaS/SaaS + EC2/S3/Blob mapping</li>
+<li>Quant: TSD (×18/5), combined work rates, CI vs SI</li><li>Logic: series differences, coding-decoding sums, blood relations, syllogism chain</li>
+<li>Verbal: since/for, voice tense, candid/frank</li>
+<li>Coding: Armstrong, palindrome, prime √n</li><li>Coding: second-largest distinct, frequency map, Two Sum</li>
+</ol></div></div>
+
+<div class="section"><h2>1-day-before cheat sheet (print this)</h2>
+<div class="grid g2">
+<div class="card"><h3>Python</h3><p><span class="kbd">len, [1:], [::-1], .get(k,0), enumerate, sorted, set</span><br>append=1 item, extend=many · tuple immutable · <span class="kbd">//</span> floor <span class="kbd">%</span> remainder · falsy: 0 '' [] None · range STOP exclusive</p></div>
+<div class="card"><h3>SQL</h3><p>SELECT-DISTINCT-WHERE-GROUP BY-HAVING-ORDER BY · INNER=match only · LEFT=all left · COUNT(*) counts rows · BETWEEN inclusive · PK unique+not-null · 1NF atomic · 2nd highest = MAX where &lt; MAX</p></div>
+<div class="card"><h3>Complexity table</h3><p>Linear search O(n) · Binary O(log n) · Bubble O(n²) · sort O(n log n) · dict in/get O(1) · Two Sum hash O(n) · Kadane O(n) · Halving loop O(log n)</p></div>
+<div class="card"><h3>Patterns → problem</h3><p>Frequency map → duplicates/anagram · Two pointers → reverse/partition · Best-so-far → max/2nd-max · Complement map → Two Sum · Stack → brackets · Digit %10 → Armstrong/palindrome · n(n+1)/2 → missing number</p></div>
+<div class="card"><h3>Quant formulas</h3><p>m/s ×18/5 = km/h · SI=PRT/100 · CI=P(1+r)ⁿ · Together = 1/(1/a+1/b) · Avg 1..n=(n+1)/2 · Total rank = L+R−1 · Dice sum9 = 4/36</p></div>
+<div class="card"><h3>Frequent confusions</h3><p>WHERE✗aggregates / HAVING✓ · sort()→None vs sorted()→list · (5) is int, (5,) tuple, {5} set · 1 not prime ·_UPSTREAM = boat−stream · 'since'+point, 'for'+duration · UDP connectionless · Versant needs B1 speaking — speak slowly, short sentences</p></div>
+</div>
+<div class="card"><h3>Exam-day checklist</h3><p>☐ ID + marksheets (they verify 65%+) ☐ Attempt ALL (no −ve) ☐ ~1 min/MCQ, flag & move ☐ Coding: brute force FIRST, save 25 min ☐ Never submit blank code ☐ HR: willing to relocate + shifts + 1-yr bond = YES, clearly</p></div></div>
+
+<div class="section"><h2>Your adaptive profile</h2>
+<div class="card"><div id="dashTable"></div><div id="readinessBox" style="margin-top:10px"></div></div></div>
+<div class="footer">End of agent program: Research → Verify → Analyze → Prioritize → Prepare → Test → Adapt. Good luck — clear the filter.</div>
+</div>
+<div id="toast" class="toast"></div>
+<script src="assets/js/app.js"></script>
+</body></html>

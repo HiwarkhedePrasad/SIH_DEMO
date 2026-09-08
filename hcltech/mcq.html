@@ -1,0 +1,69 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MCQ Bank — 130 HCLTech GET Questions</title>
+<link rel="stylesheet" href="assets/css/style.css"></head><body>
+<div class="topnav"><div class="wrap">
+<div class="brand"><div class="dot">H</div><div>HCLTech GET Prep Agent<small>MCQ Bank · 130 Qs · Phase 6</small></div></div>
+<nav class="navlinks"><a href="index.html">Research+Roadmap</a><a href="mcq.html">MCQ Bank (130)</a><a href="coding.html">Coding Bank (35)</a><a href="mocks.html">Mock Tests</a><a href="guide.html">Guide + Cheat Sheet</a></nav>
+</div></div>
+<div class="wrap">
+<div class="hero" style="padding-bottom:6px">
+<span class="kicker">PHASE 6 · Evidence-weighted: Python 25 · SQL 20 · Quant 20 · Logic 20 · Verbal 15 · Pseudo 10 · CS 10 · Cloud 10</span>
+<h1>MCQ Bank <span class="red">(130)</span></h1>
+<p class="sub">Click an option to answer. Correct = green, wrong = red + full explanation (why correct, why others wrong, concept, priority, difficulty). Every attempt updates your <b>adaptive profile</b> on the home page.</p>
+<div class="toolbar">
+<input type="text" id="search" placeholder="Search questions…" oninput="render()">
+<select id="fTopic" onchange="render()"><option value="">All topics</option></select>
+<select id="fPr" onchange="render()"><option value="">All priorities</option><option>P0</option><option>P1</option><option>P2</option><option>P3</option></select>
+<select id="fDf" onchange="render()"><option value="">All difficulties</option><option>Easy</option><option>Easy-Medium</option><option>Medium</option></select>
+<button class="btn ghost sm" onclick="resetFilter()">Reset</button>
+<button class="btn ghost sm" onclick="shuffle()">Shuffle</button>
+</div>
+<div class="progress"><i id="bar"></i></div>
+<p style="color:var(--mut);font-size:14px"><span id="count"></span> · <span id="score"></span></p>
+</div>
+<div id="list"></div>
+<div class="footer">Tip: finish all <span class="pill p0">P0</span> first (Python + SQL + Pseudocode + Quant + Logic). Then P1. Your weak topics auto-surface on the home dashboard.</div>
+</div>
+<div id="toast" class="toast"></div>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/mcq-data-a.js"></script>
+<script src="assets/js/mcq-data-b.js"></script>
+<script>
+let ALL=[...(window.MCQ_A||[]),...(window.MCQ_B||[])];
+let answered={}, correct=0;
+const topics=[...new Set(ALL.map(q=>q.t))];
+const sel=document.getElementById('fTopic');
+topics.forEach(t=>{const o=document.createElement('option');o.textContent=t;sel.appendChild(o);});
+function filtered(){
+  const s=document.getElementById('search').value.toLowerCase(),t=sel.value,p=document.getElementById('fPr').value,d=document.getElementById('fDf').value;
+  return ALL.filter((q,i)=>{q._i=i;return (!t||q.t===t)&&(!p||q.pr===p)&&(!d||q.df===d)&&(!s||(q.q+q.c).toLowerCase().includes(s));});
+}
+function resetFilter(){document.getElementById('search').value='';sel.value='';document.getElementById('fPr').value='';document.getElementById('fDf').value='';render();}
+function shuffle(){ALL.sort(()=>Math.random()-.5);render();}
+function render(){
+  const F=filtered(),L=document.getElementById('list');
+  document.getElementById('count').textContent=`Showing ${F.length} / ${ALL.length} questions`;
+  document.getElementById('score').textContent=`Answered: ${Object.keys(answered).length} · Correct: ${correct}`;
+  document.getElementById('bar').style.width=(100*Object.keys(answered).length/ALL.length)+'%';
+  L.innerHTML=F.map((q,k)=>{
+    const st=answered[q._i];
+    const opts=q.o.map((op,j)=>{
+      let cls='opt'; if(st!==undefined){ if(j===q.a)cls+=' ok'; else if(j===st)cls+=' bad'; }
+      else cls+='';
+      return `<div class="${cls}" onclick="answer(${q._i},${j})"><b>${'ABCD'[j]}.</b> ${op}</div>`;
+    }).join('');
+    const ans=(st!==undefined)?`<div class="ansbox"><b>${st===q.a?'Correct ✓':'Wrong ✗ — correct: '+'ABCD'[q.a]}</b><br><b>Why:</b> ${q.e}<br><b>Why others are wrong:</b> ${q.w}<br><b>Concept:</b> ${q.c}</div>`:'';
+    return `<div class="qcard"><div class="meta"><span class="pill ${q.pr.toLowerCase()}">${q.pr}</span><span class="pill p2">${q.df}</span><span class="pill p3">${q.t}</span><span style="color:var(--mut)">Q${q._i+1}</span></div><b>${q.q}</b><div class="opts">${opts}</div>${ans}</div>`;
+  }).join('')||'<p>No matches.</p>';
+}
+function answer(i,j){
+  if(answered[i]!==undefined)return;
+  answered[i]=j;
+  const q=ALL[i],ok=(j===q.a);
+  if(ok)correct++;
+  markAnswer(q.t,ok);
+  render();
+}
+render();
+</script>
+</body></html>

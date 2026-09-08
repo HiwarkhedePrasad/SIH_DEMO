@@ -1,0 +1,90 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mock Assessments — HCLTech GET Oriented</title>
+<link rel="stylesheet" href="assets/css/style.css"></head><body>
+<div class="topnav"><div class="wrap">
+<div class="brand"><div class="dot">H</div><div>HCLTech GET Prep Agent<small>Mocks · Phase 9 + 10</small></div></div>
+<nav class="navlinks"><a href="index.html">Research+Roadmap</a><a href="mcq.html">MCQ Bank (130)</a><a href="coding.html">Coding Bank (35)</a><a href="mocks.html">Mock Tests</a><a href="guide.html">Guide + Cheat Sheet</a></nav>
+</div></div>
+<div class="wrap">
+<div class="hero" style="padding-bottom:6px">
+<span class="kicker">PHASE 9 · HCLTech GET-Oriented (not official) · 27 MCQ (60 min) + 2 coding (30 min) = 90 min</span>
+<h1>Mock Assessments <span class="red">(3)</span></h1>
+<p class="sub">Rules: no answers shown until you submit. After submit you get <b>score, accuracy, topic + difficulty breakdown, strengths, weaknesses, next-study plan, honest readiness</b> (Phase 10). Attempts feed your adaptive profile.</p>
+<div class="tabs" id="mockTabs"></div>
+</div>
+<div class="card"><div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center">
+<div><b id="mockTitle"></b><br><span id="mockDesc" style="color:var(--mut);font-size:14px"></span></div>
+<div style="margin-left:auto;text-align:right"><span class="timer" id="timer">90:00</span><br>
+<button class="btn sm" id="startBtn" onclick="start()">Start timer</button>
+<button class="btn ghost sm" onclick="submit(true)">Submit & evaluate</button></div>
+</div><div class="progress" style="margin-top:10px"><i id="bar"></i></div></div>
+<div id="quiz"></div>
+<div id="coding"></div>
+<div id="result"></div>
+<div class="footer">Coding is self-graded honestly: mark Solved only if your code runs on the sample + one edge case. Your honesty here determines your readiness accuracy.</div>
+</div>
+<div id="toast" class="toast"></div>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/mcq-data-a.js"></script>
+<script src="assets/js/mcq-data-b.js"></script>
+<script src="assets/js/coding-data.js"></script>
+<script src="assets/js/mock-data.js"></script>
+<script>
+const BANK=[...(window.MCQ_A||[]),...(window.MCQ_B||[])];
+const COD=window.CODING||[];
+let cur=0, ans={}, codeDone={}, timerId=null, secs=90*60, started=false;
+function tabs(){
+  document.getElementById('mockTabs').innerHTML=window.MOCKS.map((m,i)=>`<button class="${i===cur?'on':''}" onclick="pick(${i})">${m.title.split('—')[0]}</button>`).join('');
+}
+function pick(i){cur=i;ans={};codeDone={};stop();secs=window.MOCKS[i].time*60;started=false;
+  document.getElementById('startBtn').textContent='Start timer';upd();load();}
+function fmt(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
+function upd(){document.getElementById('timer').textContent=fmt(secs);}
+function start(){ if(started)return; started=true; document.getElementById('startBtn').textContent='Running…';
+  timerId=setInterval(()=>{secs--;upd();if(secs<=0){stop();submit(false);toast('Time up — auto submitted');}},1000);}
+function stop(){if(timerId)clearInterval(timerId);timerId=null;}
+function load(){
+  const M=window.MOCKS[cur];
+  document.getElementById('mockTitle').textContent=M.title;
+  document.getElementById('mockDesc').textContent=M.desc+' | '+M.codingNote;
+  document.getElementById('result').innerHTML='';
+  document.getElementById('quiz').innerHTML=M.mcq.map((bi,k)=>{const q=BANK[bi];
+    return `<div class="qcard"><div class="meta"><span class="pill p3">${q.t}</span><span class="pill p2">${q.df}</span><span style="color:var(--mut)">Q${k+1}</span></div>
+    <b>${q.q}</b><div class="opts">${q.o.map((op,j)=>`<div class="opt ${ans[k]===j?'sel':''}" onclick="choose(${k},${j})"><b>${'ABCD'[j]}.</b> ${op}</div>`).join('')}</div>
+    <div id="exp${k}"></div></div>`;}).join('');
+  document.getElementById('coding').innerHTML='<div class="section"><h2>Coding (30 min) — solve on paper/IDE, then self-grade</h2></div>'+M.coding.map((ci,k)=>{const c=COD[ci];
+    return `<div class="qcard"><b>${c.title}</b><p>${c.q}<br><span class="kbd">${c.io}</span></p>
+    <details><summary>Reveal thinking hint (try first!)</summary><p>${c.th} | Brute: ${c.bf}</p></details>
+    <details><summary>Reveal Python solution (after attempting)</summary><pre>${c.code.replace(/</g,'&lt;')}</pre></details>
+    <label><input type="checkbox" ${codeDone[k]?'checked':''} onchange="codeDone[${k}]=this.checked"> I solved this (sample + edge case pass)</label></div>`;}).join('');
+  upd();
+}
+function choose(k,j){ans[k]=j;load();Object.keys(ans);document.getElementById('bar').style.width=(100*Object.keys(ans).length/window.MOCKS[cur].mcq.length)+'%';}
+function submit(manual){
+  stop();
+  const M=window.MOCKS[cur];let correct=0;const byT={},byD={};
+  M.mcq.forEach((bi,k)=>{const q=BANK[bi];const ok=(ans[k]===q.a);if(ok)correct++;
+    markAnswer(q.t+' (mock)',ok);markAnswer(q.t,ok);
+    [[byT,q.t],[byD,q.df]].forEach(([o,key])=>{o[key]=o[key]||{a:0,c:0};o[key].a++;if(ok)o[key].c++;});
+    const box=document.getElementById('exp'+k);
+    if(box)box.innerHTML=`<div class="ansbox"><b>${ok?'Correct ✓':'Wrong ✗ — answer: '+'ABCD'[q.a]}</b> — ${q.e}</div>`;});
+  document.querySelectorAll('#quiz .opt').forEach(()=>{});
+  const total=M.mcq.length,acc=Math.round(100*correct/total);
+  const codeSolved=Object.values(codeDone).filter(Boolean).length;
+  const rows=o=>Object.entries(o).map(([k,v])=>{const p=Math.round(100*v.c/v.a);return `<tr><td>${k}</td><td>${v.c}/${v.a}</td><td>${p}%</td><td><span class="pill ${p>=75?'catA':p>=50?'catB':'p0'}">${p>=75?'Strong':p>=50?'Moderate':'Weak'}</span></td></tr>`;}).join('');
+  const weak=Object.entries(byT).filter(([k,v])=>v.c/v.a<0.6).map(([k])=>k);
+  const r=(acc>=80&&codeSolved>=1)?['Strong','Mock cleared at filter-passing level. Keep with 1 mock every 2 days.']:(acc>=65&&codeSolved>=1)?['Good','Likely to clear if coding holds. Fix: '+(weak.join(', ')||'medium-difficulty Qs')+'.']:(acc>=50)?['Moderate','Below filter safety. Study plan: '+(weak.join(', ')||'P0 topics')+' then re-take.'] : ['Low','Foundation gaps. Return to MCQ bank P0 + easy coding before next mock.'];
+  const hist=store.get('mock_hist',[]);hist.push({m:M.title,score:correct+'/'+total,acc,date:new Date().toLocaleString()});store.set('mock_hist',hist);
+  document.getElementById('result').innerHTML=`<div class="card" style="border-color:var(--grn)">
+   <h3>Result — ${M.title}: ${correct}/${total} MCQ (${acc}%) · Coding ${codeSolved}/2 solved</h3>
+   <p><b>Readiness: ${r[0]}</b> — ${r[1]} (Honest rule: no fake encouragement.)</p>
+   <div class="grid g2"><div><h4>Topic performance</h4><table><tr><th>Topic</th><th>Score</th><th>Acc</th><th>Status</th></tr>${rows(byT)}</table></div>
+   <div><h4>Difficulty performance</h4><table><tr><th>Level</th><th>Score</th><th>Acc</th><th>Status</th></tr>${rows(byD)}</table></div></div>
+   <h4>Next study session (exactly this)</h4>
+   <p>1) Re-solve every wrong Q above from the <a href="mcq.html">MCQ bank</a>. 2) Drill weakest topic: <b>${weak[0]||'none — revise P0 mixed'}</b> (10 Qs). 3) Code 2 easy problems from the <a href="coding.html">coding bank</a>. 4) Re-take ${acc<65?'Mock 1':'the next mock'} in 2 days.</p>
+   <h4>History</h4><p style="color:var(--mut);font-size:13px">${hist.map(h=>`${h.date} — ${h.m}: ${h.score} (${h.acc}%)`).join('<br>')}</p></div>`;
+  window.scrollTo({top:document.getElementById('result').offsetTop-80,behavior:'smooth'});
+}
+tabs();load();
+</script>
+</body></html>
